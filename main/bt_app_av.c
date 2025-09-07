@@ -181,6 +181,7 @@ static void bt_av_notify_evt_handler(uint8_t event_id, esp_avrc_rn_param_t *even
         bt_av_playback_changed();
         break;
     /* when track playing position changed, this event comes */
+    //TODO: SEND IN QUEUE
     case ESP_AVRC_RN_PLAY_POS_CHANGED:
         ESP_LOGI(BT_AV_TAG, "Play position changed: %"PRIu32"-ms", event_parameter->play_pos);
         bt_av_play_pos_changed();

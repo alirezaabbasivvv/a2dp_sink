@@ -37,9 +37,6 @@ static const char *TAG = "UART_FULL_DUPLEX";
 #define UART_TXD_PIN       (GPIO_NUM_17)
 #define UART_RXD_PIN       (GPIO_NUM_16)
 
-// اگر خواستید RTS/CTS فعال کنید، این دو خط و بخش کامنت‌شده‌ی پایین را هم فعال کنید
-// #define UART_RTS_PIN       (GPIO_NUM_18)
-// #define UART_CTS_PIN       (GPIO_NUM_19)
 
 #define RX_BUF_SIZE        2048
 #define TX_PERIOD_MS       1000   // هر 1 ثانیه یک پیام تست می‌فرستد
@@ -48,14 +45,12 @@ static void uart_rx_task(void *arg)
 {
     uint8_t* rx_buf = (uint8_t*) malloc(RX_BUF_SIZE);
     while (1) {
-        // بلوک می‌شود تا رسیدن دیتا یا اتمام timeout
         int len = uart_read_bytes(UART_PORT, rx_buf, RX_BUF_SIZE, pdMS_TO_TICKS(100));
         if (len > 0) {
-            // نمایش داده دریافتی
             ESP_LOGI(TAG, "RX (%d bytes): %.*s", len, len, (char*)rx_buf);
-
-            // اگر خواستید Echo کنید (برگشت همان داده‌ها):
-            // uart_write_bytes(UART_PORT, (const char*)rx_buf, len);
+            if (rx_buf[0]==0xA0){
+                Send_Command_For_Music_Player(rx_buf[1]);
+            }
         }
     }
     free(rx_buf);
@@ -65,12 +60,11 @@ static void uart_rx_task(void *arg)
 static void uart_tx_task(void *arg)
 {
     uint32_t counter = 0;
-    while (1) {
-        char msg[64];
-        int n = snprintf(msg, sizeof(msg), "Hello from ESP32! cnt=%lu\r\n", (unsigned long)counter++);
-        uart_write_bytes(UART_PORT, msg, n);
-        vTaskDelay(pdMS_TO_TICKS(TX_PERIOD_MS));
-    }
+   // while (1) {
+     //   char msg[64];
+        //int n = snprintf(msg, sizeof(msg), , (unsigned long)counter++);
+       // uart_write_bytes(UART_PORT, msg, n);
+    //}
     vTaskDelete(NULL);
 }
 

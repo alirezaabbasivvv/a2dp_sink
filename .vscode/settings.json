@@ -3,6 +3,6 @@
   "idf.espIdfPathWin": "d:\\ESPIDF\\v5.5\\esp-idf",
   "idf.toolsPathWin": "d:\\ESPIDFTools",
   "idf.pythonInstallPath": "d:\\ESPIDFTools\\tools\\idf-python\\3.11.2\\python.exe",
-  "idf.portWin": "COM14",
+  "idf.portWin": "COM20",
   "idf.flashType": "UART"
 }
